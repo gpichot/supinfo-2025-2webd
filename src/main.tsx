@@ -10,12 +10,15 @@ import {
 	useParams,
 } from "react-router";
 import { Navigation } from "./components/Navigation.tsx";
+import { PokemonDetailsPage } from "./components/PokemonDetailsPage.tsx";
 
 function Contact() {
-	const { name } = useParams();
+	const { name, lastname } = useParams();
 	return (
 		<div>
-			<h1>Hello {name}</h1>
+			<h1>
+				Hello {name} {lastname}
+			</h1>
 			Contact
 		</div>
 	);
@@ -24,6 +27,7 @@ function Contact() {
 const router = createBrowserRouter([
 	{
 		path: "/",
+		errorElement: <div>Page non trouvée</div>,
 		element: (
 			<div>
 				<Navigation />
@@ -38,7 +42,11 @@ const router = createBrowserRouter([
 				element: <App />,
 			},
 			{
-				path: "/contact/:name",
+				path: "/pokemons/:pokemonId",
+				element: <PokemonDetailsPage />,
+			},
+			{
+				path: "/contact/:name/:lastname",
 				element: <Contact />,
 			},
 			{

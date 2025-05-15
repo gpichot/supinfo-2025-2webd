@@ -7,7 +7,13 @@ function App() {
 		<div>
 			<h1>Pokedex</h1>
 			<h1 className="text-3xl font-bold underline">Hello world!</h1>
-			<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
+			<div
+				style={{
+					display: "grid",
+					gridTemplateColumns: "repeat(3, 1fr)",
+					gridGap: "1rem",
+				}}
+			>
 				{pokemons.map((pokemon) => (
 					<PokemonCard key={pokemon.id} pokemon={pokemon} />
 				))}

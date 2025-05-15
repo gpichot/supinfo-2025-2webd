@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { Pokemon } from "../types";
 
 interface PokemonCardProps {
@@ -53,11 +54,13 @@ export function PokemonCard(props: PokemonCardProps) {
 	const borderColor =
 		borderColors[primaryType as keyof typeof borderColors] || "border-gray-300";
 
+	const pokemonId = pokemon.id;
+
 	return (
 		<div
-			className={`w-64 rounded-xl overflow-hidden border-8 bg-white shadow-lg transform transition-transform hover:scale-105 ${borderColor}`}
+			className={`w-64 rounded-xl overflow-hidden border-8 shadow-lg transform transition-transform hover:scale-105 ${borderColor}`}
 		>
-			<div className="p-4 bg-gradient-to-b from-gray-100 to-white">
+			<div className="p-4">
 				<div className="flex justify-between items-center mb-2">
 					<h2 className="text-xl font-bold">{name}</h2>
 				</div>
@@ -80,6 +83,7 @@ export function PokemonCard(props: PokemonCardProps) {
 						</span>
 					))}
 				</div>
+				<Link to={`/pokemons/${pokemonId}`}>Voir plus</Link>
 			</div>
 		</div>
 	);
