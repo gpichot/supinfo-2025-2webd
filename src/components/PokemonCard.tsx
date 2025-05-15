@@ -70,6 +70,8 @@ export function PokemonCard(props: PokemonCardProps) {
 						src={image || "/placeholder.svg"}
 						alt={name}
 						className="h-40 w-40 object-contain"
+						width={160}
+						height={160}
 					/>
 				</div>
 
