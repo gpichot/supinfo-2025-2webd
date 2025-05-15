@@ -1,8 +1,25 @@
+import { useQuery } from "@tanstack/react-query";
 import "./App.css";
 import { PokemonCard } from "./components/PokemonCard";
-import { pokemons } from "./mocks/pokemons";
+import type { PokemonListResponse } from "./types";
 
 function App() {
+	const { isPending, error, data } = useQuery({
+		queryKey: ["pokemons"],
+		queryFn: () =>
+			fetch("https://pokeapi.fly.dev/namespace/pokemons/?offset=20").then(
+				(response) => response.json() as Promise<PokemonListResponse>,
+			),
+	});
+
+	if (isPending) {
+		return <div>Loading...</div>;
+	}
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
+	}
+
 	return (
 		<div>
 			<h1>Pokedex</h1>
@@ -14,7 +31,7 @@ function App() {
 					gridGap: "1rem",
 				}}
 			>
-				{pokemons.map((pokemon) => (
+				{data.results.map((pokemon) => (
 					<PokemonCard key={pokemon.id} pokemon={pokemon} />
 				))}
 			</div>
