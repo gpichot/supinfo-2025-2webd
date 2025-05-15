@@ -1,5 +1,7 @@
 import { useParams } from "react-router";
 import { pokemons } from "../mocks/pokemons";
+import { useQuery } from "@tanstack/react-query";
+import type { PokemonDetail } from "../types";
 
 interface TwoColumnProps {
 	left: React.ReactNode;
@@ -20,10 +22,24 @@ function TwoColumn(props: TwoColumnProps) {
 export function PokemonDetailsPage() {
 	const { pokemonId } = useParams();
 
-	const pokemon = pokemons.find((pokemon) => pokemon.id === Number(pokemonId));
+	const {
+		isPending,
+		error,
+		data: pokemon,
+	} = useQuery({
+		queryKey: ["pokemons", pokemonId],
+		queryFn: () =>
+			fetch(`https://pokeapi.fly.dev/namespace/pokemons/${pokemonId}`).then(
+				(response) => response.json() as Promise<PokemonDetail>,
+			),
+	});
 
-	if (!pokemon) {
-		return <p>Pokemon does not exist</p>;
+	if (isPending) {
+		return <div>Loading...</div>;
+	}
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
 	}
 
 	return (
