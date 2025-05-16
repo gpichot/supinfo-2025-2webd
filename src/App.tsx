@@ -9,29 +9,29 @@ function App() {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const page = searchParams.get("page") || 1;
-	const [count, setCount] = useState(0);
+	const searchText = searchParams.get("searchText") || "";
 
 	const nbItemsPerPage = 10;
 	const offset = (Number(page) - 1) * nbItemsPerPage;
 
 	const { isPending, error, data } = useQuery({
-		queryKey: ["pokemons", { page }],
+		queryKey: ["pokemons", { page, searchText }],
 		queryFn: () =>
 			fetch(
-				`https://pokeapi.fly.dev/namespace/pokemons/?offset=${offset}`,
+				`https://pokeapi.fly.dev/namespace/pokemons/?offset=${offset}&searchText=${searchText}`,
 			).then((response) => response.json() as Promise<PokemonListResponse>),
 		placeholderData: keepPreviousData,
 	});
 
-	const isPreviousDisabled = page === 0;
+	const isPreviousDisabled = Number(page) === 1;
 	const isNextDisabled = data?.nextOffset === null;
 
 	const handlePreviousPage = () => {
-		setSearchParams({ page: String(Number(page) - 1) });
+		setSearchParams({ page: String(Number(page) - 1), searchText });
 	};
 
 	const handleNextPage = () => {
-		setSearchParams({ page: String(Number(page) + 1) });
+		setSearchParams({ page: String(Number(page) + 1), searchText });
 	};
 
 	if (isPending) {
@@ -45,17 +45,17 @@ function App() {
 	return (
 		<div>
 			<h1>Pokedex</h1>
-			<p>Count: {count}</p>
-			<button
-				type="button"
-				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-				onClick={() => {
-					setCount(count + 1);
+			<input
+				type="text"
+				id="searchText"
+				name="searchText"
+				placeholder="Search for a Pokémon"
+				value={searchText}
+				onChange={(e) => {
+					setSearchParams({ searchText: e.target.value });
 				}}
-			>
-				Increment
-			</button>
-			<h1 className="text-3xl font-bold underline">Hello world!</h1>
+				className="border-2 border-gray-300 rounded-md p-2"
+			/>
 			<div
 				style={{
 					display: "grid",

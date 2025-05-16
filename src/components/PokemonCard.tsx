@@ -54,8 +54,17 @@ export function PokemonCard(props: PokemonCardProps) {
 	const primaryType = types[0];
 	const borderColor =
 		borderColors[primaryType as keyof typeof borderColors] || "border-gray-300";
-
 	const [count, setCount] = useState(0);
+
+	const isCaptured = localStorage.getItem(`pokemon-${pokemon.id}`) === "true";
+	const handleCapture = () => {
+		if (isCaptured) {
+			localStorage.removeItem(`pokemon-${pokemon.id}`);
+		} else {
+			localStorage.setItem(`pokemon-${pokemon.id}`, "true");
+		}
+		setCount(count + 1);
+	};
 
 	const pokemonId = pokemon.id;
 
@@ -90,26 +99,18 @@ export function PokemonCard(props: PokemonCardProps) {
 				</div>
 				<Link to={`/pokemons/${pokemonId}`}>Voir plus</Link>
 
-				<p>Count: {count}</p>
-				<div style={{ display: "flex", flexFlow: "row nowrap", gap: "1rem" }}>
-					<button
-						type="button"
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
-						onClick={() => {
-							setCount(count + 1);
-						}}
-					>
-						Increment
-					</button>
-					<button
-						type="button"
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
-						onClick={() => {
-							setCount(count - 2);
-						}}
-					>
-						Decrement
-					</button>
+				<div>
+					{isCaptured ? (
+						<p>Capturé</p>
+					) : (
+						<button
+							type="button"
+							className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-xs"
+							onClick={handleCapture}
+						>
+							Capturer
+						</button>
+					)}
 				</div>
 			</div>
 		</div>
