@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import type { Pokemon } from "../types";
+import { useState } from "react";
 
 interface PokemonCardProps {
 	pokemon: Pokemon;
@@ -54,6 +55,8 @@ export function PokemonCard(props: PokemonCardProps) {
 	const borderColor =
 		borderColors[primaryType as keyof typeof borderColors] || "border-gray-300";
 
+	const [count, setCount] = useState(0);
+
 	const pokemonId = pokemon.id;
 
 	return (
@@ -86,6 +89,28 @@ export function PokemonCard(props: PokemonCardProps) {
 					))}
 				</div>
 				<Link to={`/pokemons/${pokemonId}`}>Voir plus</Link>
+
+				<p>Count: {count}</p>
+				<div style={{ display: "flex", flexFlow: "row nowrap", gap: "1rem" }}>
+					<button
+						type="button"
+						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
+						onClick={() => {
+							setCount(count + 1);
+						}}
+					>
+						Increment
+					</button>
+					<button
+						type="button"
+						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
+						onClick={() => {
+							setCount(count - 2);
+						}}
+					>
+						Decrement
+					</button>
+				</div>
 			</div>
 		</div>
 	);

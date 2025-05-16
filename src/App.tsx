@@ -3,11 +3,13 @@ import "./App.css";
 import { PokemonCard } from "./components/PokemonCard";
 import type { PokemonListResponse } from "./types";
 import { useSearchParams } from "react-router";
+import { useState } from "react";
 
 function App() {
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	const page = searchParams.get("page") || 0;
+	const page = searchParams.get("page") || 1;
+	const [count, setCount] = useState(0);
 
 	const nbItemsPerPage = 10;
 	const offset = (Number(page) - 1) * nbItemsPerPage;
@@ -25,12 +27,10 @@ function App() {
 	const isNextDisabled = data?.nextOffset === null;
 
 	const handlePreviousPage = () => {
-		console.log("previous page", page);
 		setSearchParams({ page: String(Number(page) - 1) });
 	};
 
 	const handleNextPage = () => {
-		console.log("next page", page);
 		setSearchParams({ page: String(Number(page) + 1) });
 	};
 
@@ -45,6 +45,16 @@ function App() {
 	return (
 		<div>
 			<h1>Pokedex</h1>
+			<p>Count: {count}</p>
+			<button
+				type="button"
+				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+				onClick={() => {
+					setCount(count + 1);
+				}}
+			>
+				Increment
+			</button>
 			<h1 className="text-3xl font-bold underline">Hello world!</h1>
 			<div
 				style={{
